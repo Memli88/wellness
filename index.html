@@ -97,6 +97,60 @@ body{
 .acc-body{display:none;padding-top:10px;border-top:1px solid var(--border);margin-top:10px}
 .acc-item.open .acc-body{display:block}
 
+/* ═══════════════════════════════════3-LEVEL ACCORDION  (drop-in)
+   .ac1 > .ac1-body > .ac2 > .ac2-body > .ac3 > .ac3-body
+═══════════════════════════════════ */
+
+/* Level 1 — Section */
+.ac1 { margin-bottom: 8px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+.ac1-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; cursor: pointer; user-select: none;
+  background: var(--s2); font-weight: 700; font-size: 15px;
+  transition: background .2s;
+}
+.ac1-hd:active { background: var(--s3, #2a2a2a); }
+.ac1-body { display: none; padding: 8px 10px; background: var(--bg); }
+.ac1.open > .ac1-body { display: block; }
+
+/* Level 2 — Sub-section */
+.ac2 { margin-bottom: 6px; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.ac2-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; cursor: pointer; user-select: none;
+  background: var(--s1); font-weight: 600; font-size: 13px;
+  transition: background .2s;
+}
+.ac2-hd:active { background: var(--s2); }
+.ac2-body { display: none; padding: 6px 8px; background: var(--bg); }
+.ac2.open > .ac2-body { display: block; }
+
+/* Level 3 — Card (reuses existing .card styles) */
+.ac3 { margin-bottom: 6px; }
+.ac3-hd {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; cursor: pointer; user-select: none;
+  background: var(--s1); border-radius: 12px; border: 1px solid var(--border);
+  font-size: 13px; font-weight: 600; transition: border-color .2s;
+}
+.ac3-hd:active { border-color: var(--border2); }
+.ac3-body { display: none; padding: 10px 12px 4px; }
+.ac3.open > .ac3-body { display: block; }
+.ac3.open > .ac3-hd { border-radius: 12px 12px 0 0; border-bottom-color: transparent; }
+
+/* Chevron icon */
+.ac-chevron {
+  width: 18px; height: 18px; flex-shrink: 0; opacity: .5;
+  transition: transform .25s, opacity .2s;
+}
+.open > .ac1-hd .ac-chevron,
+.open > .ac2-hd .ac-chevron,
+.open > .ac3-hd .ac-chevron { transform: rotate(180deg); opacity: 1; }
+
+/* Search highlight compatibility */
+.ac1.search-match, .ac2.search-match, .ac3.search-match { border-color: var(--accent, #4ade80); }
+
+  
 /* ── TABLE ── */
 .tbl{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
 .tbl th{background:var(--surface);color:var(--sub);padding:8px;text-align:right;font-weight:600;border-bottom:1px solid var(--border)}
@@ -715,6 +769,23 @@ document.querySelectorAll('.acc-head').forEach(h=>{
     h.closest('.acc-item, .card').classList.toggle('open');
   });
 });
+
+  /* 3-level accordion engine */
+(function(){
+  var SVG = '<svg class="ac-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';
+
+  /* inject chevron into every accordion header */
+  document.querySelectorAll('.ac1-hd,.ac2-hd,.ac3-hd').forEach(function(hd){
+    hd.insertAdjacentHTML('beforeend', SVG);
+  });
+
+  /* generic click toggle */
+  document.querySelectorAll('.ac1-hd,.ac2-hd,.ac3-hd').forEach(function(hd){
+    hd.addEventListener('click', function(){
+      var parent = this.parentElement;
+      parent.classList.toggle('open');});
+  });
+})();
 
 // ── SEARCH INDEX ──
 const idx=[];
