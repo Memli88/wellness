@@ -1,3 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wellness">
+<title>Wellness Guide</title>
+<style>
+:root{
+  --bg:#0a0a0a;--surface:#141414;--card:#1c1c1e;--border:#2c2c2e;
+  --accent:#30d158;--accent2:#0a84ff;--accent3:#ff9f0a;--accent4:#ff375f;
+  --text:#f5f5f7;--sub:#8e8e93;--safe-top:env(safe-area-inset-top,44px);
+  --safe-bot:env(safe-area-inset-bottom,34px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100dvh;overflow-x:hidden;
+}
+
+/* ── TOP BAR ── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,10,10,.85);backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  padding:calc(var(--safe-top) + 8px) 16px 12px;
+  border-bottom:1px solid var(--border);
+}
+#topbar h1{font-size:.8rem;font-weight:600;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+
+/* ── SEARCH ── */
+.sw{position:relative}
+.si-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0 12px;height:42px}
+.si-wrap svg{flex-shrink:0;color:var(--sub)}
+#si{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:.95rem;font-family:inherit;direction:rtl}
+#si::placeholder{color:var(--sub)}
+#sclear{background:none;border:none;color:var(--sub);cursor:pointer;font-size:1.1rem;padding:0;display:none}
+#sdrop{
+  position:absolute;top:calc(100% + 6px);left:0;right:0;
+  background:var(--card);border:1px solid var(--border);border-radius:14px;
+  overflow:hidden;z-index:200;display:none;max-height:60dvh;overflow-y:auto;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);
+}
+.sr{padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.sr:last-child{border-bottom:none}
+.sr:active{background:var(--border)}
+.sr-title{font-size:.9rem;font-weight:600}
+.sr-meta{font-size:.75rem;color:var(--sub);margin-top:2px}
+
+/* ── MAIN CONTENT ── */
+#main{
+  margin-top:calc(var(--safe-top) + 110px);
+  padding:0 16px calc(var(--safe-bot) + 80px);
+  max-width:430px;margin-left:auto;margin-right:auto;
+}
+
+/* ── SECTION HEADERS ── */
+.sec-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0 10px;cursor:pointer;user-select:none;
+  border-bottom:1px solid var(--border);
+}
+.sec-header h2{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.sec-header .chevron{color:var(--sub);transition:transform .3s;font-size:.85rem}
+.sec-wrap.open .chevron{transform:rotate(180deg)}
+.sec-body{display:none;padding-top:10px}
+.sec-wrap.open .sec-body{display:block}
+
+/* ── CARDS ── */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:16px;margin-bottom:10px;
+}
+.card-title{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.card-subtitle{font-size:.78rem;color:var(--sub);margin-bottom:10px}
+.card-body{font-size:.85rem;line-height:1.7;color:#d1d1d6}
+.card-body ul{padding-right:16px;margin-top:6px}
+.card-body li{margin-bottom:4px}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:600;margin:2px}
+.tag.green{background:rgba(48,209,88,.15);color:var(--accent)}
+.tag.blue{background:rgba(10,132,255,.15);color:var(--accent2)}
+.tag.orange{background:rgba(255,159,10,.15);color:var(--accent3)}
+.tag.red{background:rgba(255,55,95,.15);color:var(--accent4)}
+
+/* ── ACCORDION CARDS (inner) ── */
+.acc-head{
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;
+}
+.acc-head .chevron{font-size:.75rem;color:var(--sub);transition:transform .3s}
+.acc-item.open .acc-head .chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding-top:10px;border-top:1px solid var(--border);margin-top:10px}
+.acc-item.open .acc-body{display:block}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:.78rem;margin-top:8px}
+.tbl th{background:var(--surface);color:var(--sub);padding:8px;text-align:right;font-weight:600;border-bottom:1px solid var(--border)}
+.tbl td{padding:8px;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+
+/* ── PILL GRID ── */
+.pill-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pill{padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:600;border:1px solid var(--border);background:var(--surface)}
+
+/* ── SCROLL TO TOP ── */
+#stbtn{
+  position:fixed;bottom:calc(var(--safe-bot) + 20px);left:16px;
+  width:40px;height:40px;border-radius:50%;background:var(--surface);
+  border:1px solid var(--border);color:var(--text);font-size:1.1rem;
+  cursor:pointer;display:none;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+
+/* ── PULSING highlight ── */
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(48,209,88,.4)}50%{box-shadow:0 0 0 8px rgba(48,209,88,0)}}
+.pulsing{animation:pulse .6s ease 2}
+</style>
+</head>
+<body>
+
+
 <div id="topbar">
   <h1>🌿 راهنمای سلامتی</h1>
   <div class="sw">
@@ -575,3 +700,108 @@
 </div><!-- /#main -->
 
 <button id="stbtn">↑</button>
+
+
+<script>
+// ── ACCORDION (section + card) ──
+document.querySelectorAll('.sec-header').forEach(h=>{
+  h.addEventListener('click',()=>{
+    h.closest('.sec-wrap').classList.toggle('open');
+  });
+});
+document.querySelectorAll('.acc-head').forEach(h=>{
+  h.addEventListener('click',e=>{
+    e.stopPropagation();
+    h.closest('.acc-item, .card').classList.toggle('open');
+  });
+});
+
+// ── SEARCH INDEX ──
+const idx=[];
+document.querySelectorAll('.card').forEach(card=>{
+  const sec=card.closest('.sec-wrap');
+  idx.push({
+    id:card.id,
+    title:card.querySelector('.card-title')?.textContent||'',
+    sub:card.querySelector('.card-subtitle')?.textContent||'',
+    body:(card.querySelector('.acc-body, .card-body')?.textContent||'').slice(0,300),
+    secLabel:sec?.querySelector('h2')?.textContent?.trim()||'',
+    secWrap:sec
+  });
+});
+
+const si=document.getElementById('si');
+const sdrop=document.getElementById('sdrop');
+const sclear=document.getElementById('sclear');
+
+function showResults(q){
+  if(!q||q.length<2){sdrop.style.display='none';return;}
+  const r=idx.filter(i=>
+    i.title.includes(q)||i.sub.includes(q)||i.body.includes(q)
+  ).slice(0,10);
+  if(!r.length){sdrop.style.display='none';return;}
+  sdrop.innerHTML=r.map(i=>`
+    <div class="sr" data-id="${i.id}">
+      <div class="sr-title">${i.title}</div>
+      <div class="sr-meta">${i.secLabel} · ${i.sub}</div></div>`).join('');
+  sdrop.style.display='block';
+}
+
+si.addEventListener('input',e=>{
+  sclear.style.display=e.target.value?'block':'none';
+  showResults(e.target.value.trim());
+});
+
+sclear.addEventListener('click',()=>{
+  si.value='';sclear.style.display='none';
+  sdrop.style.display='none';si.focus();
+});
+
+sdrop.addEventListener('click',e=>{
+  const sr=e.target.closest('.sr');
+  if(!sr)return;
+  const card=document.getElementById(sr.dataset.id);
+  if(!card)return;
+  // open section
+  const sec=card.closest('.sec-wrap');
+  if(sec)sec.classList.add('open');
+  // open card
+  card.classList.add('open');
+  // clear search
+  si.value='';sclear.style.display='none';sdrop.style.display='none';
+  // scroll + pulse
+  setTimeout(()=>{
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+    card.classList.add('pulsing');
+    setTimeout(()=>card.classList.remove('pulsing'),1200);
+  },100);
+});
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape')sdrop.style.display='none';});
+document.addEventListener('click',e=>{if(!e.target.closest('.sw'))sdrop.style.display='none';});
+
+// ── SCROLL TO TOP ──
+const stbtn=document.getElementById('stbtn');
+window.addEventListener('scroll',()=>{
+  stbtn.style.display=scrollY>300?'block':'none';
+});
+stbtn.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+</script>
+
+<!-- PWA: inline manifest via JS -->
+<script>
+const manifest={
+  name:'Wellness Guide',short_name:'Wellness',
+  start_url:'.',display:'standalone',
+  background_color:'#0a0a0a',theme_color:'#0a0a0a',
+  icons:[{src:'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>',sizes:'any',type:'image/svg+xml'}]
+};
+const blob=new Blob([JSON.stringify(manifest)],{type:'application/json'});
+const link=document.createElement('link');
+link.rel='manifest';link.href=URL.createObjectURL(blob);
+document.head.appendChild(link);
+</script>
+
+</body>
+</html>
+
